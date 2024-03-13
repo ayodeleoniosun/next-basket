@@ -1,10 +1,15 @@
 ### Overview of the application
-This application is a microservice based application, developed using DDD.
-It has two services, namely:
+This application is a microservice based application, with two services, namely:
 - User service which is the publisher.
 - Notification service which is the consumer.
 
-RabbitMQ was used for exchange of messages.
+The following are the stacks used for this solution:
+- DDD for the software development principle.
+- Laravel framework for the application.
+- MySQL for the database.
+- Nginx for the webserver.
+- RabbitMQ for exchange of messages.
+- Docker for containerization.
 
 Data being transmitted from user service is consumed and saved in a log file on the notification service.
 
