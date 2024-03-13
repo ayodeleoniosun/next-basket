@@ -60,19 +60,26 @@ http://localhost:8084
 docker-compose exec user_app php artisan queue:work
 ```
 
-#### Step 8: Open a new terminal to consume jobs on notification service
+#### Step 8: Open another terminal to consume jobs on notification service
 
 ```shell
  docker-compose exec notification_app php artisan rabbitmq:consume
 ```
 
-#### Step 8: Testing
+### API Documentation
+
+The Postman API collection is available [Here](postman_collection.json). <br/>
+
+Import the postman collection and hit the users endpoint.
+
+Upon creation of new user, the `user service` would publish a message to the `default` queue on rabbitmq and it shall 
+be consumed by the `notification` service.
+
+Afterwards the user data would be saved in the `users.log` file as seen [Here](notifications/storage/app/public/users.log)
+
+### Automated testing
 Run the following command to run tests:
 
 ```shell
 bash run-tests.sh
 ```
-
-### API Documentation
-
-The Postman API collection is available [Here](postman_collection.json). <br/>
