@@ -1,5 +1,6 @@
 ### Overview of the application
-This application is a microservice based application with two services, namely:
+This application is a microservice based application, developed using DDD.
+It has two services, namely:
 - User service which is the publisher.
 - Notification service which is the consumer.
 
