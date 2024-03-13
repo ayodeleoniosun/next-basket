@@ -11,6 +11,11 @@ cd src/users
 cp .env.example .env
 composer install --quiet
 
+# Setup env variables for users service and install composer dependencies
+cd src/notifications
+cp .env.example .env
+composer install --quiet
+
 echo "${PINK}Creating ecommerce network if not exist ..."
 
 NETWORK_NAME=ecommerce

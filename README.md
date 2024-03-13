@@ -42,19 +42,31 @@ bash setup.sh
 docker-compose exec user_app php artisan migrate
 ```
 
-#### Step 5: Create a new terminal and run the queue worker for user service
+#### Step 5: Visit rabbitmq management panel using this URL
+
+```shell
+http://localhost:8084
+```
+
+#### Step 6: Create new queue on rabbitmq called `default`
+ - Click on the `queue` tab on the overview page.
+ - On the `add a new queue` form, input `default` as the queue name.
+ - Click on `add queue` button.
+
+
+#### Step 7: Open a new terminal and run the queue worker for user service
 
 ```shell
 docker-compose exec user_app php artisan queue:work
 ```
 
-#### Step 6: Create a new terminal and consume jobs on notification service
+#### Step 8: Open a new terminal to consume jobs on notification service
 
 ```shell
  docker-compose exec notification_app php artisan rabbitmq:consume
 ```
 
-#### Step 7: Testing
+#### Step 8: Testing
 Run the following command to run tests:
 
 ```shell

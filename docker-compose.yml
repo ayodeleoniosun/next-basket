@@ -32,16 +32,6 @@ services:
      networks:
        - ecommerce
 
-  user_phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: user_phpmyadmin
-    ports:
-      - "3401:80"
-    depends_on:
-      - user_db
-    networks:
-      - ecommerce
-
   #application layer
   user_app:
     container_name: user_app
@@ -69,33 +59,8 @@ services:
      - ./src/notifications/nginx/conf.d/:/etc/nginx/conf.d/
    depends_on:
      - notification_app
-     - notification_db
    networks:
     - ecommerce
-
-  #database server
-  notification_db:
-   image: mysql
-   container_name: notification_db
-   volumes:
-     - ./src/notifications/mysql/data:/var/lib/mysql
-   ports:
-     - "3308:3306"
-   environment:
-     MYSQL_DATABASE: notifications
-     MYSQL_ROOT_PASSWORD: password
-   networks:
-      - ecommerce
-
-  notification_phpmyadmin:
-    image: phpmyadmin/phpmyadmin
-    container_name: notification_phpmyadmin
-    ports:
-      - "3402:80"
-    depends_on:
-      - notification_db
-    networks:
-      - ecommerce
 
   #application layer
   notification_app:
@@ -110,6 +75,22 @@ services:
    working_dir: /var/www/notifications
    networks:
      - ecommerce
+
+  #rabbitmq layer
+  rabbitmq-management:
+    image: rabbitmq:management
+    hostname: "my-rabbit"
+    container_name: rabbitmq
+    environment:
+      RABBITMQ_HOST: my-rabbit
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASSWORD: guest
+      RABBITMQ_DEFAULT_VHOST: "/"
+    ports:
+      - "8084:15672"
+      - "5673:5672"
+    networks:
+      - ecommerce
 
 networks:
   ecommerce:
