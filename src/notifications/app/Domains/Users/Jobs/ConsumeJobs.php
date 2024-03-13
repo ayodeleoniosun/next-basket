@@ -2,16 +2,8 @@
 
 namespace App\Domains\Users\Jobs;
 
-use Illuminate\Bus\Queueable;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Foundation\Bus\Dispatchable;
-use Illuminate\Queue\InteractsWithQueue;
-use Illuminate\Queue\SerializesModels;
-use Illuminate\Support\Facades\Storage;
-use PhpAmqpLib\Message\AMQPMessage;
+use App\Domains\Users\Actions\AppendUserDataInLog;
 use VladimirYuldashev\LaravelQueueRabbitMQ\Queue\Jobs\RabbitMQJob;
-use VladimirYuldashev\LaravelQueueRabbitMQ\Queue\RabbitMQQueue;
 
 class ConsumeJobs extends RabbitMQJob
 {
@@ -24,10 +16,11 @@ class ConsumeJobs extends RabbitMQJob
     {
         $data = $this->getDataFromPublisher();
 
-        Storage::append('users.log', json_encode($data));
+        (new AppendUserDataInLog($data))->execute();
     }
 
-    private function getDataFromPublisher() {
+    private function getDataFromPublisher()
+    {
         $payload = json_decode(json_encode($this->payload()));
         $user = unserialize($payload->data->command);
 
@@ -36,6 +29,7 @@ class ConsumeJobs extends RabbitMQJob
 
     private function convertToObject($object)
     {
-        return unserialize(preg_replace('/^O:\d+:"[^"]++"/', 'O:' . strlen('stdClass') . ':"' .'stdClass'. '"', serialize($object)));
+        return unserialize(preg_replace('/^O:\d+:"[^"]++"/', 'O:'.strlen('stdClass').':"'.'stdClass'.'"',
+            serialize($object)));
     }
 }
