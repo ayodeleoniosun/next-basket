@@ -3,10 +3,14 @@
 namespace Tests\Domains\Users\Actions;
 
 use App\Domains\Users\Actions\CreateNewUser;
+use App\Domains\Users\Jobs\PublishUserDataToNotificationService;
 use App\Models\User;
 use Faker\Factory;
+use Illuminate\Support\Facades\Queue;
 
 it('can create new users', function () {
+    Queue::fake();
+
     $faker = Factory::create();
 
     $payload = [
@@ -16,6 +20,8 @@ it('can create new users', function () {
     ];
 
     $user = (new CreateNewUser($payload))->execute();
+
+    Queue::assertPushed(PublishUserDataToNotificationService::class);
 
     expect($user)->toBeInstanceOf(User::class)
         ->and($user->first_name)->toEqual($payload['firstName'])

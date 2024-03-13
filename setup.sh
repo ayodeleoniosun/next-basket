@@ -4,14 +4,19 @@ set -e
 GREEN=$(tput setaf 2)
 PINK=$(tput setaf 5)
 
-echo "${PINK}Setting up env ..."
+echo "${PINK}Setting up environment variables ..."
 
 # Setup env variables for users service and install composer dependencies
 cd src/users
 cp .env.example .env
 composer install --quiet
 
-docker network create ecommerce
+echo "${PINK}Creating ecommerce network if not exist ..."
+
+NETWORK_NAME=ecommerce
+if [ -z $(docker network ls --filter name=^${NETWORK_NAME}$ --format="{{ .Name }}") ] ; then
+     docker network create ${NETWORK_NAME} ;
+fi
 
 echo "${PINK}Building docker images ..."
 
@@ -21,9 +26,4 @@ docker-compose build
 # Spring up docker containers in detached mode
 docker-compose up -d --force-recreate
 
-echo "${PINK}Running migrations ..."
-
-# Run database migrations for user service
-docker-compose exec user_app php artisan migrate
-
-echo "${GREEN}Set up completed!"
+echo "${GREEN}Application dockerized!"
