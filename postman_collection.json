@@ -11,10 +11,16 @@
 			"name": "Create New Users",
 			"request": {
 				"method": "POST",
-				"header": [],
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n    \"firstName\": \"ayodele\",\n    \"lastName\": \"oniosun\",\n    \"email\": \"ayodeleoniosun@gmail.com\"\n}",
+					"raw": "{\n    \"firstName\": \"ayodele\",\n    \"lastName\": \"oniosun\",\n    \"email\": \"ayodeonioss@gmaissl.com\"\n}",
 					"options": {
 						"raw": {
 							"language": "json"
