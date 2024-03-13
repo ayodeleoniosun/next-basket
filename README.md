@@ -70,12 +70,12 @@ docker-compose exec user_app php artisan queue:work
 
 The Postman API collection is available [Here](postman_collection.json). <br/>
 
-Import the postman collection and hit the users endpoint.
+Import the postman collection and hit the `Create New User` endpoint.
 
 Upon creation of new user, the `user service` would publish a message to the `default` queue on rabbitmq and it shall 
 be consumed by the `notification` service.
 
-Afterwards the user data would be saved in the `users.log` file as seen [Here](notifications/storage/app/public/users.log)
+Afterwards the user data would be saved in the `users.log` file as seen [Here](notifications/storage/app/users.log)
 
 ### Automated testing
 Run the following command to run tests:
