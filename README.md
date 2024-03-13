@@ -41,7 +41,19 @@ bash setup.sh
 docker-compose exec user_app php artisan migrate
 ```
 
-#### Step 5: Testing
+#### Step 5: Create a new terminal and run the queue worker for user service
+
+```shell
+docker-compose exec user_app php artisan queue:work
+```
+
+#### Step 6: Create a new terminal and consume jobs on notification service
+
+```shell
+ docker-compose exec notification_app php artisan rabbitmq:consume
+```
+
+#### Step 7: Testing
 Run the following command to run tests:
 
 ```shell
