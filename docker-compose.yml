@@ -1,0 +1,116 @@
+version: '3.8'
+
+services:
+  #user-service
+
+  #web server
+  user_service:
+    image: nginx:alpine
+    container_name: user_service
+    ports:
+      - "8081:80"
+    volumes:
+      - ./src/users:/var/www/users
+      - ./src/users/nginx/conf.d/:/etc/nginx/conf.d/
+    depends_on:
+      - user_app
+      - user_db
+    networks:
+      - ecommerce
+
+  #database server
+  user_db:
+     image : mysql
+     container_name : user_db
+     volumes:
+       - ./src/users/mysql/data:/var/lib/mysql
+     ports:
+       - "3307:3306"
+     environment:
+       MYSQL_DATABASE: users
+       MYSQL_ROOT_PASSWORD: password
+     networks:
+       - ecommerce
+
+  user_phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: user_phpmyadmin
+    ports:
+      - "3401:80"
+    depends_on:
+      - user_db
+    networks:
+      - ecommerce
+
+  #application layer
+  user_app:
+    container_name: user_app
+    build:
+      context: ./src/users
+      dockerfile: Dockerfile
+    volumes:
+      - ./src/users:/var/www/users
+    ports:
+      - "9001:9000"
+    working_dir: /var/www/users
+    networks:
+      - ecommerce
+
+  #notification-service
+
+  #web server
+  notification_service:
+   image: nginx:alpine
+   container_name: notification_service
+   ports:
+     - "8082:80"
+   volumes:
+     - ./src/notifications:/var/www/notifications
+     - ./src/notifications/nginx/conf.d/:/etc/nginx/conf.d/
+   depends_on:
+     - notification_app
+     - notification_db
+   networks:
+    - ecommerce
+
+  #database server
+  notification_db:
+   image: mysql
+   container_name: notification_db
+   volumes:
+     - ./src/notifications/mysql/data:/var/lib/mysql
+   ports:
+     - "3308:3306"
+   environment:
+     MYSQL_DATABASE: notifications
+     MYSQL_ROOT_PASSWORD: password
+   networks:
+      - ecommerce
+
+  notification_phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: notification_phpmyadmin
+    ports:
+      - "3402:80"
+    depends_on:
+      - notification_db
+    networks:
+      - ecommerce
+
+  #application layer
+  notification_app:
+   container_name: notification_app
+   build:
+     context: ./src/notifications
+     dockerfile: Dockerfile
+   volumes:
+     - ./src/notifications:/var/www/notifications
+   ports:
+     - "9002:9000"
+   working_dir: /var/www/notifications
+   networks:
+     - ecommerce
+
+networks:
+  ecommerce:
+    external: true
