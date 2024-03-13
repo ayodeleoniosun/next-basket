@@ -8,14 +8,6 @@ RabbitMQ was used for exchange of messages.
 
 Data being transmitted from user service is consumed and saved in a log file on the notification service.
 
-### Architecture of the application
-
-Attached below is a pictorial architecture of the application:
-
-## Proposed Architecture
-
-![architecture](microservice-architecture.png)
-
 ### General installation guides
 
 #### Step 1: Clone the repository
