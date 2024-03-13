@@ -12,7 +12,7 @@ cp .env.example .env
 composer install --quiet
 
 # Setup env variables for users service and install composer dependencies
-cd src/notifications
+cd ../ && cd notifications
 cp .env.example .env
 composer install --quiet
 
